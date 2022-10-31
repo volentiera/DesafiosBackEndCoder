@@ -1,32 +1,22 @@
 const express = require('express')
 const { Router } = express
-const Contenedor = require('./index.js');
+const Contenedor = require('./index.js')
 
 
 const app = express()
 
 const router = Router()
 
-const PORT = 8081;
+const PORT = 8081
+
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static(__dirname + '/public'))
+
+app.use(router)
+router.use(express.json())
 
 const path = new Contenedor('./products.json')
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static(__dirname + '/public'));
-
-app.use(router)
-
-router.use(express.json())
-
-const server = app.listen(PORT, () =>
-    console.log(
-        `Server started on PORT http://localhost:${PORT} at ${new Date().toLocaleString()}`
-    )
-);
-
-server.on('error', (err) =>{
-    console.log('Error en el servidor:', err)
-})
 
 
 router.get('/api/productos', async (req,res) => {
@@ -79,4 +69,14 @@ router.put('/api/productos/:id', async (req,res)=>{
     } catch (error) {
         console.log(error)
     }
+})
+
+const server = app.listen(PORT, () =>
+    console.log(
+        `Server started on PORT http://localhost:${PORT} at ${new Date().toLocaleString()}`
+    )
+);
+
+server.on('error', (err) =>{
+    console.log('Error en el servidor:', err)
 })

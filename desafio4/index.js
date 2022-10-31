@@ -80,14 +80,14 @@ class Contenedor {
             console.log(`Reading ERR! ${err}`);
         }
     }
-    async modifyProductById(id, products){
+    async modifyProductById(id, product){
         try {
             const content = await this.getAll()
             const filterById = await content.filter(e => e.id === id)
 
             const isEmpty = Object.keys(filterById).length === 0;
             if (!isEmpty){
-            const newModifiedProduct = {id: id, name: `${products.name}`, price: products.price }
+            const newModifiedProduct = {id: id, name: `${product.name}`, price: product.price }
             content.splice((id-1), 1 , newModifiedProduct)
             await fs.writeFile(`./${this.route}`, JSON.stringify(content, null, 2))
             } else{
