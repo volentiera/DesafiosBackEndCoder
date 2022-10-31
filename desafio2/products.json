@@ -2,8 +2,15 @@
     "id": 1,
     "name": "hola",
     "price": 250
-}, {
+  },
+  {
     "id": 2,
     "name": "holaa",
     "price": 2550
-}]
+  },
+  {
+    "id": 3,
+    "name": "celular",
+    "price": 250000
+  }
+]

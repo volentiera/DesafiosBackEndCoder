@@ -39,7 +39,7 @@ class Contenedor {
                 }
                 await content.push(newProductFromCero)
             }else{
-                const lastId = content[content.length - 1]
+                
                 const newProductCompleted = {
                     id: (lastId.id +1),
                     name: newProduct.name,
@@ -68,6 +68,7 @@ class Contenedor {
         }else {
             console.log("id no encontrado")
         }
+    
     }
     
 }

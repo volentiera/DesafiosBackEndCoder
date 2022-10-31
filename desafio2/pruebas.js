@@ -15,11 +15,11 @@ async function main (){
     // await products.deleteByid(1)
 
     // ---prueba de save---
-    // const productoNuevo = {
-    //     name:"celular",
-    //     price: 25000
-    // }
-    //await products.save(productoNuevo)
+    const newProduct = {
+        name:"celular",
+        price: 250000
+    }
+    await products.save(newProduct)
     // ---prueba de save---
 
 
