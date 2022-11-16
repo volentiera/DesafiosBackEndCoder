@@ -16,5 +16,23 @@
     "name": "Iphone",
     "price": "250000",
     "image": "/uploads/iphone.jpg"
+  },
+  {
+    "id": 4,
+    "name": "dsadsds",
+    "price": "dsadasdsdads",
+    "image": "C:\\fakepath\\iphone.jpg"
+  },
+  {
+    "id": 5,
+    "name": "asdasddsa",
+    "price": "asdasdasdasd",
+    "image": "C:\\fakepath\\iphone.jpg"
+  },
+  {
+    "id": 6,
+    "name": "sdadsaasd",
+    "price": "sdaasdsaddsa",
+    "image": "C:\\fakepath\\teclado2.jpg"
   }
 ]

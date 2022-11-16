@@ -6,6 +6,8 @@ const { Server: IOServer } = require('socket.io')
 const http = require('http');
 const app = express()
 const PORT = 8081
+const Container = require('./index.js')
+const patho = new Container('./products.json')
 
 
 
@@ -29,8 +31,17 @@ app.get('/', (req, res) => {
 )
 const messages = []
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('New user connected. Socket ID : ', socket.id);
+
+    socket.emit('productos', patho.getAll());
+
+    socket.on('update', product => {
+
+    patho.save(product)
+    io.sockets.emit('productos', patho.getAll());
+
+    })
 
     socket.on('set-name', (name) => {
         console.log('set-name', name);

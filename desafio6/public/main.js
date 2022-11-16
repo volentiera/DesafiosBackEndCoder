@@ -4,8 +4,47 @@ const div = document.getElementById('messages')
 const btn = document.getElementById('enviar')
 const inputNombre = document.getElementById('nombre')
 const inputTexto = document.getElementById('texto')
+const divList = document.getElementById('divList')
+const btnProd = document.getElementById('btnProd')
+const inputName = document.getElementById('name')
+const inputPrice = document.getElementById('price')
+const inputImage = document.getElementById('image')
 
+btnProd.addEventListener('click', () => {
+    console.log(divList)
+    const name = inputName.value
+    const price = inputPrice.value
+    const image = inputImage.value
+    inputTexto.value = ''
+    inputNombre.value = ''
+    socket.emit('update', {
+        name: name,
+        price: price,
+        image: image
+    });
+});
 
+socket.on('productos',(products)=>{
+    divList.innerHTML = products.map(product =>{
+        console.log(product.image)
+        return (`
+            <div class="card" style="width: 250px; margin: 30px">
+            <div class="card-image" style="padding: 15px">
+                <figure class="image is-4by3">
+                    <img src="${product.image}" alt="Placeholder image" />
+                </figure>
+            </div>
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-content">
+                        <p class="title is-4">${product.name}</p>
+                        <p class="subtitle is-6">${product.price}</p>
+                    </div>
+                </div>
+            </div>
+        </div>`).join("")
+    })
+})
 
 btn.addEventListener('click', () => {
     console.log(inputNombre)
