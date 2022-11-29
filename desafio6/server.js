@@ -1,45 +1,42 @@
-const express = require('express')
-const morgan = require('morgan');
-const routeProducts = require('./routes/productRoutes');
-const path = require('path');
-const { Server: IOServer } = require('socket.io')
-const http = require('http');
+import express from 'express'
+import routeProducts from './routes/productRoutes.js'
+import { createServer } from "http";
+import { Server } from "socket.io";
+import ClienteSql from "./sql.js";
+import { config } from "./config/mariaDB.js";
+
+
 const app = express()
 const PORT = 8081
-const Container = require('./index.js')
-const patho = new Container('./products.json')
 
+const httpServer = createServer(app);
+const io = new Server(httpServer)
+const sql = new ClienteSql(config)
 
-
-const httpServer = http.createServer(app)
-const io = new IOServer(httpServer)
-
-
-app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
-app.use(express.static(__dirname + '/public'))
-app.set('views',path.join(__dirname, './public/views'));
+app.use(express.static('/public'))
+app.set('views','./public/views');
 app.set('view engine', 'ejs');
 
 
 app.use('/api/products', routeProducts);
-app.get('/', (req, res) => {
-    res.redirect('/api/products');
-}
-)
+app.get('/', (req , res)=>{
+    res.redirect('/api/products')
+})
+
 const messages = []
 
 io.on('connection', async (socket) => {
     console.log('New user connected. Socket ID : ', socket.id);
 
-    socket.emit('productos', patho.getAll());
+    socket.emit('products', await sql.getProducts());
 
-    socket.on('update', product => {
+    socket.on('update', async product => {
 
-    patho.save(product)
-    io.sockets.emit('productos', patho.getAll());
+    await sql.insertProducts(product)
+    io.sockets.emit('products', await sql.getProducts());
 
     })
 
@@ -70,56 +67,4 @@ const server = httpServer.listen(PORT, () =>
 server.on('error', (err) =>{
     console.log('Error en el servidor:', err)
 })
-
-// router.get('/api/productos', async (req,res) => {
-//     try {
-//         const allProducts = await path.getAll()
-//         res.json(allProducts)
-        
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
-// router.get('/api/productos/:id', async (req,res) => {
-//     try {
-//         const newId = Number(req.params.id)
-//         const productById = await path.getById(newId)
-//         const productNotFound = {error: 'Producto no encontrado'}
-//         if (productById !== undefined){
-//             res.json(productById)
-//         } else {
-//             res.json(productNotFound)
-//         }
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
-// router.post('/api/productos', async (req,res)=>{
-//     try {
-//         const producto = {name: req.body.name, price: Number(req.body.price) }
-//         const newProduct = await path.save(producto)
-//         const allProducts = await path.getAll()
-//         res.json(allProducts)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
-// router.delete('/api/productos/:id', async (req,res)=>{
-//     try {
-//         const id = Number(req.params.id)
-//         const elementDeleted = await path.deleteByid(id)
-//         res.json(elementDeleted)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
-// router.put('/api/productos/:id', async (req,res)=>{
-//     try {
-//         const id = Number(req.params.id)
-//         const modifyProduct = await path.modifyProductById(id, (req.body))
-//         res.json(modifyProduct)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
 

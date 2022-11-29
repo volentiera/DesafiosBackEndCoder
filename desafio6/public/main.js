@@ -1,3 +1,4 @@
+
 const socket = io()
 
 const div = document.getElementById('messages')
@@ -10,8 +11,8 @@ const inputName = document.getElementById('name')
 const inputPrice = document.getElementById('price')
 const inputImage = document.getElementById('image')
 
-btnProd.addEventListener('click', () => {
-    console.log(divList)
+btnProd.addEventListener('click', (e) => {
+    e.preventDefault()
     const name = inputName.value
     const price = inputPrice.value
     const image = inputImage.value
@@ -24,9 +25,8 @@ btnProd.addEventListener('click', () => {
     });
 });
 
-socket.on('productos',(products)=>{
+socket.on('products', (products) =>{
     divList.innerHTML = products.map(product =>{
-        console.log(product.image)
         return (`
             <div class="card" style="width: 250px; margin: 30px">
             <div class="card-image" style="padding: 15px">
@@ -42,7 +42,7 @@ socket.on('productos',(products)=>{
                     </div>
                 </div>
             </div>
-        </div>`).join("")
+        </div>`)
     })
 })
 
